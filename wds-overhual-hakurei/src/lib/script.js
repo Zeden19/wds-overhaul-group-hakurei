@@ -1,5 +1,5 @@
-document.addEventListener("DOMContentLoaded", attachListeners);
-document.addEventListener("DOMContentLoaded", checkPage);
+// document.addEventListener("DOMContentLoaded", attachListeners);
+// document.addEventListener("DOMContentLoaded", checkPage);
 
 function attachListeners() {
     document.querySelector('.login_form')?.addEventListener('submit', login);
