@@ -40,7 +40,7 @@
 
 
     </div>
-    <img src="phone-demo.png" class="phone"/>
+    <img src="stephanie.png" class="phone stephanie"/>
     <img src="splash-img.png" class="splash"/>
 </div>
 <span class="copy">Copyright © 2023, Western Developers Society </span>
@@ -51,6 +51,7 @@
     h2 {
         color: #2540d3;
     }
+
     .about-text {
         background-color: #F1F1F1;
         padding: 20px;
@@ -64,5 +65,13 @@
         line-height: 2;
     }
 
+    .stephanie {
+        border-radius: 100%;
+        position: fixed;
+        bottom: 15%;
+        right: 5%;
+        height: calc(80vh - 128px);
+        border: 5px solid black;
+    }
 
 </style>

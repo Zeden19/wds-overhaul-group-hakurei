@@ -5,7 +5,7 @@
         <input type="password" placeholder="Password">
         <a href="/">Forgot Password?</a>
         <div class="buttons">
-            <a class="btn" href="/">Don't have a account?</a>
+            <a class="btn" href="/register">Don't have a account?</a>
             <a class="btn" href="/notes">Submit</a>
         </div>
     </form>
