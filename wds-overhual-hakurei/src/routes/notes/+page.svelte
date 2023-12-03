@@ -141,10 +141,4 @@
         align-items: center;
         padding: 12px 0;
     }
-
-    .files > button {
-        width: 80%;
-        height: 28px;
-        font-size: 20px;
-    }
 </style>

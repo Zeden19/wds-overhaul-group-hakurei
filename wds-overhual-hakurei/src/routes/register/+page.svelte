@@ -23,8 +23,8 @@
         </select></label>
 
         <div class="buttons">
-            <button><a class="btn" href="/login">Already have a account?</a></button>
-            <button><a class="btn" href="/login">Submit</a></button>
+            <a class="btn" href="/login">Already have a account?</a>
+            <a class="btn" href="/login">Submit</a>
         </div>
     </form>
 </div>
@@ -80,5 +80,10 @@
         width: 70%;
         justify-content: space-evenly;
         flex-wrap: wrap;
+    }
+
+    button {
+        background: none;
+        border: none;
     }
 </style>

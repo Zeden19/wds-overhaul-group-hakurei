@@ -6,7 +6,7 @@
 <div class="main">
     <div class="head">
         <div class="title">
-            <img src="link.png"/>
+            <img alt="link-logo" src="link.png"/>
             <span class="title">To The Future</span>
         </div>
         <div class="description">
@@ -18,8 +18,8 @@
             <a href="/login" class="signin">Already a User? Sign In</a>
         </div>
     </div>
-    <img src="phone-demo.png" class="phone"/>
-    <img src="splash-img.png" class="splash"/>
+    <img alt="phone" src="phone-demo.png" class="phone"/>
+    <img alt="splash" src="splash-img.png" class="splash"/>
 </div>
 <span class="copy">Copyright © 2023, Western Developers Society </span>
 

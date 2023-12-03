@@ -6,7 +6,7 @@
 <div class="main">
     <div class="head">
         <div class="title">
-            <img src="link.png"/>
+            <img alt="link-logo" src="link.png"/>
             <span class="title"> Plans & Pricing</span>
         </div>
 
