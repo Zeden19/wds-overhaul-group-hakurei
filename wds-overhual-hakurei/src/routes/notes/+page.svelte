@@ -5,47 +5,46 @@
 
     let voices = [];
     let selectedVoice;
-    let selection;
     onMount(() => {
         speechSynthesis.onvoiceschanged = () => {
             voices = speechSynthesis.getVoices();
             selectedVoice = voices[0];
         };
 
-        document.addEventListener(`selectionchange`, () => {
-            selection = document.getSelection();
-        });
     });
-
-    let text;
 
     let today = new Date();
     export let files = [
         {
-            title: "First Note", date: today.getFullYear() + "." + (today.getMonth() + 1) + "." + today.getDate(),
-            time: today.getHours() + ":" + today.getMinutes()
+            title: "First Note",
+            date: today.getFullYear() + "." + (today.getMonth() + 1) + "." + today.getDate(),
+            time: today.getHours() + ":" + today.getMinutes(),
+            content: "The first of many notes!",
+            id: 0
         },
         {
-            title: "Second Note", date: today.getFullYear() + "." + (today.getMonth() + 1) + "." + today.getDate(),
-            time: today.getHours() + ":" + today.getMinutes()
+            title: "Second Note",
+            date: today.getFullYear() + "." + (today.getMonth() + 1) + "." + today.getDate(),
+            time: today.getHours() + ":" + today.getMinutes(),
+            content: "The second of many notes!",
+            id: 1
         }
     ]
+    let text = files[0].content;
+    let fileId = 0
 
     function newNote() {
         today = new Date();
         files.push({
             title: "New Note", date: today.getFullYear() + "." + (today.getMonth() + 1) + "." + today.getDate(),
-            time: today.getHours() + ":" + today.getMinutes()
+            time: today.getHours() + ":" + today.getMinutes(),
+            id: files[files.length - 1].id + 1
         })
 
         files = files;
-
-        console.log(files)
     }
 
     function play() {
-        console.log(selection.text)
-
         speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.rate = 1;
@@ -55,7 +54,9 @@
         speechSynthesis.speak(utterance);
     }
 
-    $: console.log(selection)
+    function setFileContent(content) {
+        files[fileId].content = content
+    }
 </script>
 <TextOptions on:speak={() => play()}/>
 <div class="notes_main">
@@ -65,13 +66,13 @@
             <button on:click={() => newNote()} class="add_file">+</button>
         </div>
         <div class="files">
-            {#each files as {title, date, time}, file}
-                <File title="{title}" date="{date}" time="{time}"/>
+            {#each files as {title, date, time, content, id}}
+                <File title="{title}" date="{date}" time="{time}" content="{content}" id="{id}" bind:fileId bind:text/>
             {/each}
         </div>
     </div>
     <div class="notes">
-        <textarea bind:value={text} name="writing" cols="30" rows="10" class="writing"></textarea>
+        <textarea bind:value={text} on:change={() => setFileContent(text)} name="writing" cols="30" rows="10" class="writing"></textarea>
     </div>
 </div>
 
