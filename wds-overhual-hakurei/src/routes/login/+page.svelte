@@ -19,12 +19,14 @@
 
     .login_form {
         margin: 64px auto;
-        width: 50vh;
+        width: 70vh;
         max-width: 600px;
         display: flex;
         flex-direction: column;
-        gap: 24px;
+        gap: 2em;
         align-items: center;
+        border: 1px solid grey;
+        padding: 30px;
     }
 
     .login_form > input {
@@ -52,7 +54,7 @@
         flex-direction: row;
         gap: 5px;
         width: 70%;
-        justify-content: space-between;
+        justify-content: space-evenly;
         flex-wrap: wrap;
     }
 </style>
