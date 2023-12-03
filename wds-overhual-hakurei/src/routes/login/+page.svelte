@@ -1,8 +1,8 @@
 <div class="main">
     <form class="login_form">
         <h1>Login</h1>
-        <input type="text" placeholder="Username">
-        <input type="password" placeholder="Password">
+        <input required type="text" placeholder="Username">
+        <input required type="password" placeholder="Password">
         <a href="/">Forgot Password?</a>
         <div class="buttons">
             <a class="btn" href="/register">Don't have a account?</a>
