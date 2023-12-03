@@ -12,32 +12,34 @@
 
 <div class="text-options">
     <div class="text-options-start">
-        <img width="40px" height="40px" alt="plus-icon" src="text-options/plus.png">
-        <div class="three-dots"></div>
-        <img width="40px" height="40px" src="text-options/house.png">
+        <button><img width="40px" height="40px" alt="plus-icon" src="text-options/plus.png"></button>
+        <button class="three-dots"></button>
+        <button><img alt="house" width="40px" height="40px" src="text-options/house.png"></button>
     </div>
 
     <div class="text-options-middle">
-        <p class="T">T</p>
-        <img width="45px" height="45px" src="text-options/search.png">
-        <img width="50px" height="50px" src="text-options/redo.png">
-        <img width="50px" height="50px" src="text-options/undo.png">
+        <button class="T">T</button>
+        <button><img alt="search" width="45px" height="45px" src="text-options/search.png"></button>
+        <button><img alt="redo" width="50px" height="50px" src="text-options/redo.png"></button>
+        <button><img alt="undo" width="50px" height="50px" src="text-options/undo.png"></button>
 
     </div>
 
     <div class="text-options-latter">
-        <img width="50px" height="50px" src="text-options/pen.png">
-        <img width="50px" height="50px" src="text-options/highlight.png">
-        <img width="50px" height="50px" src="text-options/eraser.png">
-        <img width="55px" height="55px" src="text-options/protractor.png">
+        <button><img alt="pen" width="50px" height="50px" src="text-options/pen.png"></button>
+        <button><img alt="highlight" width="50px" height="50px" src="text-options/highlight.png"></button>
+        <button><img alt="eraser" width="50px" height="50px" src="text-options/eraser.png"></button>
+        <button><img alt="protractor" width="55px" height="55px" src="text-options/protractor.png"></button>
     </div>
 
     <div class="text-options-end">
-        <img width="45px" height="45px" src="text-options/copy.png">
-        <img width="45px" height="45px" src="text-options/microphone.png">
-        <img class="speak" on:click={() => callSpeak()} width="45px" height="45px" src="text-options/speak.png">
-        <img width="45px" on:click={() => dialog.showModal()} height="45px" src="text-options/share.png">
-        <img width="45px" height="45px" src="text-options/settings.png">
+        <button><img alt="copy" width="45px" height="45px" src="text-options/copy.png"></button>
+        <button><img alt="microphone" width="45px" height="45px" src="text-options/microphone.png"></button>
+        <button on:click={() => callSpeak()}><img alt="speak" class="speak" width="45px" height="45px"
+                                                  src="text-options/speak.png"></button>
+        <button on:click={() => dialog.showModal()}><img alt="share" width="45px" height="45px"
+                                                         src="text-options/share.png"></button>
+        <button><img alt="settings" width="45px" height="45px" src="text-options/settings.png"></button>
     </div>
 
     <dialog bind:this={dialog}>
@@ -140,6 +142,12 @@
     dialog {
         border: black 5px solid;
         background: white;
+    }
+
+    button {
+        background: none;
+        border: none;
+        cursor: pointer;
     }
 
 

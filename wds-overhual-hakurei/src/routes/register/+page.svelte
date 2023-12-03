@@ -23,8 +23,8 @@
         </select></label>
 
         <div class="buttons">
-            <a class="btn" href="/register">Don't have a account?</a>
-            <a class="btn" href="/notes">Submit</a>
+            <button><a class="btn" href="/login">Already have a account?</a></button>
+            <button><a class="btn" href="/login">Submit</a></button>
         </div>
     </form>
 </div>
