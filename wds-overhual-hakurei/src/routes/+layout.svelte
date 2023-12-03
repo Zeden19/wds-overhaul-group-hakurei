@@ -1,9 +1,6 @@
 <script>
     import {page} from "$app/stores";
 </script>
-
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,11 +16,10 @@
 <main>
     <div class="navbar">
         <div class="pages">
-            <img src="logo.png" alt="logo">
+            <a href="/"><img src="logo.png" alt="logo"></a>
             <a class:selected="{$page.url.pathname === '/'}" href="/">Home</a>
+            <a class:selected="{$page.url.pathname === '/about'}" href="/about">About</a>
             <a class:selected="{$page.url.pathname === '/pricing'}" href="/pricing">Pricing</a>
-            <a class:selected="{$page.url.pathname === '/teams'}" href="/teams">For Teams</a>
-            <a class:selected="{$page.url.pathname === '/individuals'}" href="/individuals">For Individuals</a>
             <a class:selected="{$page.url.pathname === '/mission'}" href="/mission">Mission</a>
         </div>
         <div class="general">
@@ -36,7 +32,6 @@
 </main>
 </body>
 <slot/>
-</html>
 
 <style>
     .navbar {

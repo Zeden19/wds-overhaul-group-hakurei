@@ -10,8 +10,9 @@ body {
     --btn-primary-dark: #111b47;
     --btn-secondary: transparent;
 }
+
 .head {
-    margin: 128px 0 0 48px;
+    margin: 5% 0 0 48px;
     width: calc(100% - 648px);
     display: flex;
     flex-direction: column;
@@ -24,6 +25,7 @@ body {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    width: 100%;
 }
 
 .title > .title {
@@ -61,4 +63,34 @@ body {
     bottom: 12px;
     left: 12px;
     color: grey;
+}
+
+.btn {
+    text-decoration: none;
+    background-color: var(--btn-primary);
+    padding: 10px 15%;
+    overflow: visible;
+    color: white !important;
+    border: none;
+}
+
+.btn:hover {
+    font-weight: 600;
+    color: #6868d3;
+}
+
+.phone {
+    z-index: 10;
+    position: fixed;
+    bottom: 48px;
+    right: 124px;
+    height: calc(90vh - 128px);
+}
+
+.splash {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    height: 92vh;
+    width: 50vw;
 }

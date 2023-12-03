@@ -1,20 +1,77 @@
 <script>
     import TextOptions from "./TextOptions.svelte";
-</script>
+    import {onMount} from "svelte";
+    import File from "./File.svelte";
 
-<TextOptions/>
+    let voices = [];
+    let selectedVoice;
+    let selection;
+    onMount(() => {
+        speechSynthesis.onvoiceschanged = () => {
+            voices = speechSynthesis.getVoices();
+            selectedVoice = voices[0];
+        };
+
+        document.addEventListener(`selectionchange`, () => {
+            selection = document.getSelection();
+        });
+    });
+
+    let text;
+
+    let today = new Date();
+    export let files = [
+        {
+            title: "First Note", date: today.getFullYear() + "." + (today.getMonth() + 1) + "." + today.getDate(),
+            time: today.getHours() + ":" + today.getMinutes()
+        },
+        {
+            title: "Second Note", date: today.getFullYear() + "." + (today.getMonth() + 1) + "." + today.getDate(),
+            time: today.getHours() + ":" + today.getMinutes()
+        }
+    ]
+
+    function newNote() {
+        today = new Date();
+        files.push({
+            title: "New Note", date: today.getFullYear() + "." + (today.getMonth() + 1) + "." + today.getDate(),
+            time: today.getHours() + ":" + today.getMinutes()
+        })
+
+        files = files;
+
+        console.log(files)
+    }
+
+    function play() {
+        console.log(selection.text)
+
+        speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1;
+        utterance.pitch = 1;
+        utterance.voice = selectedVoice;
+        utterance.volume = 1;
+        speechSynthesis.speak(utterance);
+    }
+
+    $: console.log(selection)
+</script>
+<TextOptions on:speak={() => play()}/>
 <div class="notes_main">
     <div class="sidebar">
         <div class="top">
             <span>Files</span>
-            <button class="add_file">+</button>
+            <button on:click={() => newNote()} class="add_file">+</button>
         </div>
         <div class="files">
+            {#each files as {title, date, time}, file}
+                <File title="{title}" date="{date}" time="{time}"/>
+            {/each}
         </div>
     </div>
     <div class="notes">
-        <textarea name="writing" cols="30" rows="10" class="writing">
-</textarea>
+        <textarea bind:value={text} name="writing" cols="30" rows="10" class="writing"></textarea>
     </div>
 </div>
 
@@ -30,16 +87,30 @@
         height: calc(100% - 48px);
         width: 20%;
         border-right: 1px solid var(--border);
-        padding: 24px;
     }
 
     .sidebar > .top {
-        font-size: 16px;
         display: flex;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+        height: 7%;
+        font-family: Inter sans-serif;
+        box-shadow: 0 4px 2px -2px grey;
+        font-size: 20px;
         justify-content: space-between;
-        font-weight: bold;
         border-bottom: 1px solid var(--border);
-        padding-bottom: 16px;
+        font-style: italic;
+    }
+
+    .add_file {
+        background: transparent;
+        border: none;
+        font-size: 30px;
+    }
+
+    .add_file:hover {
+        background: rgba(126, 125, 125, 0.20);
     }
 
     .notes {
