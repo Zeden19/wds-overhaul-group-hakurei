@@ -7,6 +7,9 @@
         dispatch('speak');
     }
 
+    function callSpeechRecognition() {
+        dispatch('speechRecognition')
+    }
     export let dialog;
 </script>
 
@@ -34,7 +37,7 @@
 
     <div class="text-options-end">
         <button><img alt="copy" width="45px" height="45px" src="text-options/copy.png"></button>
-        <button><img alt="microphone" width="45px" height="45px" src="text-options/microphone.png"></button>
+        <button on:click={() => callSpeechRecognition()}><img alt="microphone" width="45px" height="45px" src="text-options/microphone.png"></button>
         <button on:click={() => callSpeak()}><img alt="speak" class="speak" width="45px" height="45px"
                                                   src="text-options/speak.png"></button>
         <button on:click={() => dialog.showModal()}><img alt="share" width="45px" height="45px"

@@ -5,13 +5,6 @@
 
     let voices = [];
     let selectedVoice;
-    onMount(() => {
-        speechSynthesis.onvoiceschanged = () => {
-            voices = speechSynthesis.getVoices();
-            selectedVoice = voices[0];
-        };
-
-    });
 
     let today = new Date();
     export let files = [
@@ -32,6 +25,21 @@
     ]
     let text = files[0].content;
     let fileId = 0
+
+    let recognition;
+    onMount(() => {
+        speechSynthesis.onvoiceschanged = () => {
+            voices = speechSynthesis.getVoices();
+            selectedVoice = voices[0];
+        };
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        recognition = new SpeechRecognition();
+
+        recognition.lang = "en-US";
+        recognition.interimResults = false;
+    });
 
     function newNote() {
         today = new Date();
@@ -57,8 +65,20 @@
     function setFileContent(content) {
         files[fileId].content = content
     }
+
+    function textToSpeech() {
+        recognition.start()
+
+        recognition.onresult = (event) => {
+            text += " " + event.results[0][0].transcript.charAt(0).toUpperCase() + event.results[0][0].transcript.slice(1) + ".";
+        };
+
+        recognition.onspeechend = () => {
+            recognition.stop();
+        };
+    }
 </script>
-<TextOptions on:speak={() => play()}/>
+<TextOptions on:speechRecognition={() => textToSpeech()} on:speak={() => play()}/>
 <div class="notes_main">
     <div class="sidebar">
         <div class="top">
@@ -67,12 +87,14 @@
         </div>
         <div class="files">
             {#each files as {title, date, time, content, id}}
-                <File title="{title}" date="{date}" time="{time}" content="{content}" id="{id}" bind:fileId bind:text/>
+                <File title="{title}" date="{date}" time="{time}" content="{content}" id="{id}"
+                      bind:fileId bind:text/>
             {/each}
         </div>
     </div>
     <div class="notes">
-        <textarea bind:value={text} on:change={() => setFileContent(text)} name="writing" cols="30" rows="10" class="writing"></textarea>
+        <textarea bind:value={text} on:change={() => setFileContent(text)} name="writing" cols="30" rows="10"
+                  class="writing"></textarea>
     </div>
 </div>
 
