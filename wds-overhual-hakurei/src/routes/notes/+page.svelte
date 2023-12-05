@@ -53,8 +53,9 @@
     }
 
     function play() {
+        let spokenText = window.getSelection().toString() === "" ? text : window.getSelection().toString()
         speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
+        const utterance = new SpeechSynthesisUtterance(spokenText);
         utterance.rate = 1;
         utterance.pitch = 1;
         utterance.voice = selectedVoice;

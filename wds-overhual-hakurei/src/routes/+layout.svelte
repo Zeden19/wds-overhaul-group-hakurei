@@ -1,5 +1,30 @@
 <script>
     import {page} from "$app/stores";
+    import {onMount} from "svelte";
+    import {shortcut} from "./shortcut.js";
+
+    let voices = [];
+    let selectedVoice;
+
+    onMount(() => {
+        speechSynthesis.onvoiceschanged = () => {
+            voices = speechSynthesis.getVoices();
+            selectedVoice = voices[0];
+        };
+    })
+
+
+    function readText() {
+        let spokenText = window.getSelection().toString();
+
+        speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(spokenText);
+        utterance.rate = 1;
+        utterance.pitch = 1;
+        utterance.voice = selectedVoice;
+        utterance.volume = 1;
+        speechSynthesis.speak(utterance);
+    }
 </script>
 <head>
     <meta charset="UTF-8">
@@ -12,7 +37,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
           rel="stylesheet">
 </head>
-<body>
+<body use:shortcut={{control: true, alt: true, code: 'KeyS', callback: () => readText()}}>
 <main>
     <div class="navbar">
         <div class="pages">
@@ -32,6 +57,9 @@
 </main>
 </body>
 <slot/>
+
+<button on:click={() => readText()} class="floating-icon"><img alt="speak" src="text-options/speak.png">
+</button>
 
 <style>
     .navbar {
@@ -88,5 +116,27 @@
         color: white !important;
     }
 
+    .floating-icon {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        width: 5em;
+        height: 5em;
+        background-color: #7D7DF7;
+        border-radius: 100%;
+        border: none;
+        box-shadow: 0 0 15px 3px black;
+    }
+
+    .floating-icon:hover {
+        background-color: #6868d3;
+
+    }
+
+    .floating-icon > img {
+        width: 100%; /* or any custom size */
+        height: 100%;
+        object-fit: contain;
+    }
 
 </style>
