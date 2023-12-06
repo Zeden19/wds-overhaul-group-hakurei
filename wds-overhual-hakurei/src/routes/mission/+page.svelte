@@ -1,5 +1,4 @@
 <script>
-    import "$lib/script.js";
 </script>
 
 

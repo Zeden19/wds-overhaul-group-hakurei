@@ -5,14 +5,12 @@
 
     let voices = [];
     let selectedVoice;
-
     onMount(() => {
         speechSynthesis.onvoiceschanged = () => {
             voices = speechSynthesis.getVoices();
             selectedVoice = voices[0];
         };
     })
-
 
     function readText() {
         let spokenText = window.getSelection().toString();
@@ -38,6 +36,8 @@
           rel="stylesheet">
 </head>
 <body use:shortcut={{control: true, alt: true, code: 'KeyS', callback: () => readText()}}>
+
+
 <main>
     <div class="navbar">
         <div class="pages">
