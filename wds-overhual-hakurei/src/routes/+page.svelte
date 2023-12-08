@@ -3,32 +3,20 @@
 
     let result;
     let statedata = '';
-
-    async function xget(st) {
-        const response = await fetch('/api/getstate', {
-            method: 'POST',
-            body: JSON.stringify({st}),
-            headers: {
-                'content-type': 'application/json'
-            }
-        });
-
-        result = await response.json();
-        statedata = result[0];
-    }
+    //
 </script>
 
 
-{#each data.data as state}
-    <button on:click={() => xget(state.state)}>{state.state}</button>
-{/each}
+<!--{#each data.data as state}-->
+<!--    <button on:click={() => xget(state.state)}>{state.state}</button>-->
+<!--{/each}-->
 
-{#if statedata}
-    <p>The capital of {statedata.state} is {statedata.capital}!</p>
-    <p>Its abbreviation is {statedata.abbr}.</p>
-    <p>It is in the {statedata.region} region.</p>
-    <p>Its state bird is the {statedata.bird}.</p>
-{/if}
+<!--{#if statedata}-->
+<!--    <p>The capital of {statedata.state} is {statedata.capital}!</p>-->
+<!--    <p>Its abbreviation is {statedata.abbr}.</p>-->
+<!--    <p>It is in the {statedata.region} region.</p>-->
+<!--    <p>Its state bird is the {statedata.bird}.</p>-->
+<!--{/if}-->
 
 <div class="main">
     <div class="head">

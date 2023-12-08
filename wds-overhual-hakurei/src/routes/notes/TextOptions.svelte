@@ -57,8 +57,6 @@
 
         <p>Here is your link:</p>
         <a href="/">https://InLink/notes/19127ohcaowye92qnhahdia</a>
-        <p></p>
-
         <button class="btn" on:click={dialog.close()}>Close</button>
     </dialog>
 </div>
@@ -151,6 +149,11 @@
         background: none;
         border: none;
         cursor: pointer;
+    }
+
+    .btn {
+        margin-top: 10px;
+        background-color: black;
     }
 
 

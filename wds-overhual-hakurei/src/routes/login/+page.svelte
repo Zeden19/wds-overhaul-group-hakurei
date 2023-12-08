@@ -1,13 +1,24 @@
+<script>
+    import {enhance} from "$app/forms";
+
+    export let form;
+</script>
+
 <div class="main">
-    <form class="login_form">
+    <form method="post" use:enhance action="?/login" class="login_form">
         <h1>Login</h1>
-        <input required type="text" placeholder="Username">
-        <input required type="password" placeholder="Password">
+        <input required type="text" value={form?.username ?? ''} name="username" placeholder="Username">
+        <input required type="password" name="password" placeholder="Password">
         <a href="/">Forgot Password?</a>
         <div class="buttons">
             <a class="btn" href="/register">Don't have a account?</a>
-            <a class="btn" href="/notes">Submit</a>
+            <button class="btn" type="submit">Submit</button>
         </div>
+
+
+        {#if form?.error}
+            <p class="error">{form.error}</p>
+        {/if}
     </form>
 </div>
 <style>

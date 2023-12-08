@@ -79,6 +79,7 @@
         };
     }
 </script>
+
 <TextOptions on:speechRecognition={() => textToSpeech()} on:speak={() => play()}/>
 <div class="notes_main">
     <div class="sidebar">

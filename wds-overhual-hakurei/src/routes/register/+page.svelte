@@ -1,15 +1,22 @@
+<script>
+    import {blur} from "svelte/transition";
+    import {enhance} from "$app/forms";
+
+    export let form;
+</script>
+
 <div class="main">
-    <form class="login_form">
+    <form method="post" use:enhance action="?/register" class="login_form">
         <h1>Register</h1>
 
         <div class="input-fields">
-            <input type="text" placeholder="Email">
-            <input type="text" placeholder="Name">
+            <input value="{form?.email ?? ''}" required type="email" name="email" placeholder="Email">
+            <input value="{form?.name ?? ''}" required type="text" name="name" placeholder="Name">
         </div>
 
         <div class="input-fields">
-            <input type="text" placeholder="Username">
-            <input type="password" placeholder="Password">
+            <input value="{form?.username ?? ''}" required type="text" name="username" placeholder="Username">
+            <input type="password" name="password" required placeholder="Password">
         </div>
 
         <a href="/">Forgot Password?</a>
@@ -22,12 +29,18 @@
             <option>None</option>
         </select></label>
 
+        {#if form?.error}
+            <p in:blur={{}} class="error">{form.error}</p>
+        {/if}
+
         <div class="buttons">
             <a class="btn" href="/login">Already have a account?</a>
-            <a class="btn" href="/login">Submit</a>
+            <button type="submit" class="btn" href="/login">Submit</button>
         </div>
     </form>
 </div>
+
+
 <style>
     @import "$lib/style.css";
 
@@ -85,5 +98,11 @@
     button {
         background: none;
         border: none;
+    }
+
+    .error {
+        color: red;
+        margin-block-start: 0;
+        margin-block-end: 0;
     }
 </style>
