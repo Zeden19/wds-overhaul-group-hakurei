@@ -45,7 +45,7 @@ export const actions = {
         }
 
 
-        cookies.set('email:', email, {path: '/'})
+        cookies.set('email', email, {path: '/notes'})
         throw redirect(307, '/notes')
     }
 };
