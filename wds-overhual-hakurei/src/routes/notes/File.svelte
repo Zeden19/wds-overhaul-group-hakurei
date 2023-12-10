@@ -1,11 +1,11 @@
 <script>
     import {createEventDispatcher} from 'svelte';
+    import {slide} from "svelte/transition";
 
     const dispatch = createEventDispatcher();
 
     export let title;
     export let date;
-    export let time;
     export let content;
     export let id;
 
@@ -24,11 +24,18 @@
     }
 </script>
 
-<div role="button" tabindex="0" on:keydown={(key) => handleKeyDown(key)} class:selected={fileId === id}
+<div transition:slide={{x: -200}} role="button" tabindex="0" on:keydown={(key) => handleKeyDown(key)} class:selected={fileId === id}
      on:click|preventDefault={() => setNewNote(content)} class="file-rectangle">
     <div class="title-date">
         <input type="text" class="title" value="{title}">
-        <p class="date">{date} - {time}</p>
+        <p class="date">{`${date.toLocaleString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric'
+        })}`}</p>
     </div>
     <div class="three-dots"></div>
 </div>
@@ -42,7 +49,7 @@
         padding: 10px 8px 8px 10px;
         background-color: #AEE2FF;
         width: 90%;
-        height: 30%;
+        height: 10%;
         justify-content: space-between;
         margin-right: 3px;
     }

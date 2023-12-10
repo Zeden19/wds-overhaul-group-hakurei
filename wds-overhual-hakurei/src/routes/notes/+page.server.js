@@ -5,13 +5,15 @@ export async function load({cookies}) {
     const connection = await mysqlconnFn();
 
 
-    const data = await connection.query("SELECT * FROM users WHERE email = (?)", [email]);
+    let data = await connection.query("SELECT * FROM users WHERE email = (?)", [email]);
     const userData = data[0][0];
 
+    data = await connection.query("SELECT * FROM NOTES WHERE userid = (?)", [userData.id])
+    const notesData = data[0];
+
     return {
-        username: userData.username,
-        email: userData.email,
-        name: userData.name
+        user: {id: userData.id, username: userData.username, email: userData.email, name: userData.name},
+        notes: notesData
     }
 
 
