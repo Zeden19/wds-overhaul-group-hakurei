@@ -10,7 +10,7 @@
         <h1>Register</h1>
 
         <div class="input-fields">
-            <input value="{form?.email ?? ''}" required type="email" name="email" placeholder="Email">
+            <input value="{form?.email ?? ''}" type="email" name="email" placeholder="Email">
             <input value="{form?.name ?? ''}" required type="text" name="name" placeholder="Name">
         </div>
 

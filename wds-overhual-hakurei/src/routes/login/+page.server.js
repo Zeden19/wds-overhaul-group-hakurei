@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import {error, fail, redirect} from "@sveltejs/kit";
 
 export const actions = {
-    login: async ({request}) => {
+    login: async ({request, cookies}) => {
         const connection = await mysqlconnFn();
         const data = await request.formData();
 
@@ -11,12 +11,11 @@ export const actions = {
         const password = data.get('password');
 
         const fields = [{fieldName: "username", value: username}, {fieldName: "password", value: password}]
-        for (const field in fields) {
-            if (field.value === '') {
-                return fail(422, {
-                    error: `You must enter a ${field.fieldName}`
-                })
-            }
+        const emptyField = fields.find(field => field.value === '');
+        if (emptyField) {
+            return fail(422, {
+                error: `You must enter a ${emptyField.fieldName}`
+            })
         }
 
         let results = await connection.query("SELECT * FROM users WHERE username = (?)", [username])
@@ -36,6 +35,8 @@ export const actions = {
             })
         }
 
+        // setting cookies which can be used by notes to get data
+        cookies.set('email', results[0][0].email, {path: '/notes', secure: false})
         throw redirect(307, '/notes')
     }
 

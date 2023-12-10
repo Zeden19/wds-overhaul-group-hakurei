@@ -4,7 +4,7 @@ import {redirect} from '@sveltejs/kit';
 import {fail} from "@sveltejs/kit";
 
 export const actions = {
-    register: async ({request}) => {
+    register: async ({request, cookies}) => {
         const connection = await mysqlconnFn();
         const data = await request.formData();
 
@@ -17,12 +17,11 @@ export const actions = {
             {fieldName: "password", value: password}, {fieldName: "name", value: name}]
 
 
-        for (const field of fields) {
-            if (field.value === '') {
-                return fail(422, {
-                    error: `You must enter a ${field.fieldName}`
-                })
-            }
+        const emptyField = fields.find(field => field.value === '')
+        if (emptyField) {
+            return fail(422, {
+                error: `You must enter a ${emptyField.fieldName}`
+            })
         }
 
         try {
@@ -45,6 +44,8 @@ export const actions = {
             }
         }
 
+
+        cookies.set('email:', email, {path: '/'})
         throw redirect(307, '/notes')
     }
 };

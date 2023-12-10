@@ -6,7 +6,6 @@
     function callSpeak() {
         dispatch('speak');
     }
-
     function callSpeechRecognition() {
         dispatch('speechRecognition')
     }

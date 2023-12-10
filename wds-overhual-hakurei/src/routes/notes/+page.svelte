@@ -3,6 +3,11 @@
     import {onMount} from "svelte";
     import File from "./File.svelte";
 
+    export let data;
+    const username = data.username
+    const email = data.email;
+    const name = data.name;
+
     let voices = [];
     let selectedVoice;
 
@@ -80,6 +85,7 @@
     }
 </script>
 
+<h2>Hello {name}</h2>
 <TextOptions on:speechRecognition={() => textToSpeech()} on:speak={() => play()}/>
 <div class="notes_main">
     <div class="sidebar">
