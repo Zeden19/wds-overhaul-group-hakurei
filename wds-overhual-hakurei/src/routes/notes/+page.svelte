@@ -80,7 +80,7 @@
         </div>
         <div class="files">
             {#each notes as {id, name, content, created_at}}
-                <File title="{name}" date="{created_at}" content="{content}" id="{id}"
+                <File {notes} title="{name}" date="{created_at}" content="{content}" id="{id}"
                       bind:fileId bind:text/>
             {/each}
         </div>

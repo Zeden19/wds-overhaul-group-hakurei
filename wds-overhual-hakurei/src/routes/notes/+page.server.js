@@ -15,6 +15,16 @@ export async function load({cookies}) {
         user: {id: userData.id, username: userData.username, email: userData.email, name: userData.name},
         notes: notesData
     }
+}
 
+export const actions = {
+    newNoteTitle: async ({request}) => {
+        const connection = await mysqlconnFn();
+        const data = await request.formData();
+        const newTitle = data.get('title');
+        const id = data.get('id');
 
+        await connection.query("UPDATE Notes SET name=(?) WHERE id=(?)", [newTitle, id])
+
+    }
 }

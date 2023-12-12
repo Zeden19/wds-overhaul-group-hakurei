@@ -1,6 +1,7 @@
 <script>
     import {createEventDispatcher} from 'svelte';
     import {slide} from "svelte/transition";
+    import {enhance} from "$app/forms";
 
     const dispatch = createEventDispatcher();
 
@@ -12,6 +13,9 @@
     export let text;
     export let fileId;
 
+    let titleForm;
+    export let notes;
+
     function setNewNote(content) {
         text = content
         fileId = id
@@ -22,12 +26,25 @@
             setNewNote(content)
         }
     }
+
+    async function manualEnhance(event) {
+
+    }
 </script>
 
-<div transition:slide={{x: -200}} role="button" tabindex="0" on:keydown={(key) => handleKeyDown(key)} class:selected={fileId === id}
+<div transition:slide={{x: -200}} role="button" tabindex="0" on:keydown={(key) => handleKeyDown(key)}
+     class:selected={fileId === id}
      on:click|preventDefault={() => setNewNote(content)} class="file-rectangle">
     <div class="title-date">
-        <input type="text" class="title" value="{title}">
+        <form method="post" action="?/newNoteTitle" bind:this={titleForm} use:enhance={() => {
+            return async ({update}) => {
+                notes.find((note) => note.id = id).name = title;
+                update({reset: false})
+            }
+        }}>
+            <input name="title" type="text" class="title" bind:value="{title}" on:focusout={() => titleForm.requestSubmit()}>
+            <input name="id" type="hidden" value="{id}">
+        </form>
         <p class="date">{`${date.toLocaleString('en-US', {
             weekday: 'short',
             month: 'short',

@@ -1,22 +1,5 @@
 <script>
-    export let data;
-
-    let result;
-    let statedata = '';
-    //
 </script>
-
-
-<!--{#each data.data as state}-->
-<!--    <button on:click={() => xget(state.state)}>{state.state}</button>-->
-<!--{/each}-->
-
-<!--{#if statedata}-->
-<!--    <p>The capital of {statedata.state} is {statedata.capital}!</p>-->
-<!--    <p>Its abbreviation is {statedata.abbr}.</p>-->
-<!--    <p>It is in the {statedata.region} region.</p>-->
-<!--    <p>Its state bird is the {statedata.bird}.</p>-->
-<!--{/if}-->
 
 <div class="main">
     <div class="head">
