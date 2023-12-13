@@ -1,6 +1,7 @@
 <script>
     import TextOptions from "./TextOptions.svelte";
     import {onMount} from "svelte";
+    import {enhance} from "$app/forms";
     import File from "./File.svelte";
 
     export let data;
@@ -11,9 +12,20 @@
     let selectedVoice;
 
     let text = notes[0]?.content;
-    let fileId = 0
+    let fileId = notes[0].id
+
+    let noteContentForm;
 
     let recognition;
+
+    let debounceTimer;
+
+    function submitFormRequest() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            noteContentForm.requestSubmit();
+        }, 500);
+    }
     onMount(() => {
         speechSynthesis.onvoiceschanged = () => {
             voices = speechSynthesis.getVoices();
@@ -43,6 +55,7 @@
     }
 
     function play() {
+        console.log(notes)
         let spokenText = window.getSelection().toString() === "" ? text : window.getSelection().toString()
         speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(spokenText);
@@ -52,10 +65,6 @@
         utterance.volume = 1;
         speechSynthesis.speak(utterance);
     }
-
-    // function setFileContent(content) {
-    //     files[fileId].content = content
-    // }
 
     function textToSpeech() {
         recognition.start()
@@ -70,6 +79,10 @@
     }
 </script>
 
+<!--todo's:
+add translation
+find other way to update local "notes" variable
+Add success for loading (and returning success or failure)-->
 <h2>Hello {user.name}</h2>
 <TextOptions on:speechRecognition={() => textToSpeech()} on:speak={() => play()}/>
 <div class="notes_main">
@@ -85,10 +98,16 @@
             {/each}
         </div>
     </div>
-    <div class="notes">
-        <textarea bind:value={text} name="writing" cols="30" rows="10"
-                  class="writing"></textarea>
-    </div>
+    <form method="post" bind:this={noteContentForm} action="?/setNoteContent" class="notes" use:enhance={() => {
+    return async ({update}) => {
+        update({reset: false})
+        notes.find((note) => note.id === fileId).content = text;
+        notes = notes;
+    }}}>
+        <input type="hidden" name="id" value="{fileId}">
+        <textarea data-form-type="other" autocomplete="off" bind:value={text} name="content" cols="30" rows="10"
+                  class="writing" on:keyup={() => submitFormRequest()} on:focusout={() => noteContentForm.requestSubmit()}></textarea>
+    </form>
 </div>
 
 <style>

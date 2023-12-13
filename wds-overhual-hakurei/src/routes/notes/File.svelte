@@ -27,9 +27,6 @@
         }
     }
 
-    async function manualEnhance(event) {
-
-    }
 </script>
 
 <div transition:slide={{x: -200}} role="button" tabindex="0" on:keydown={(key) => handleKeyDown(key)}
@@ -38,11 +35,13 @@
     <div class="title-date">
         <form method="post" action="?/newNoteTitle" bind:this={titleForm} use:enhance={() => {
             return async ({update}) => {
-                notes.find((note) => note.id = id).name = title;
                 update({reset: false})
+                notes.find((note) => note.id === id).name = title;
+                notes = notes;
             }
         }}>
-            <input name="title" type="text" class="title" bind:value="{title}" on:focusout={() => titleForm.requestSubmit()}>
+            <input autocomplete="off" data-form-type="other" name="title" type="text" class="title" bind:value="{title}"
+                   on:focusout={() => titleForm.requestSubmit()}>
             <input name="id" type="hidden" value="{id}">
         </form>
         <p class="date">{`${date.toLocaleString('en-US', {

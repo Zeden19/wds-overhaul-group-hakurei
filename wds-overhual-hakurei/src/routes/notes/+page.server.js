@@ -21,10 +21,21 @@ export const actions = {
     newNoteTitle: async ({request}) => {
         const connection = await mysqlconnFn();
         const data = await request.formData();
+
         const newTitle = data.get('title');
         const id = data.get('id');
 
         await connection.query("UPDATE Notes SET name=(?) WHERE id=(?)", [newTitle, id])
 
+    },
+
+    setNoteContent: async ({request}) => {
+        const connection = await mysqlconnFn();
+        const data = await request.formData();
+
+        const newContent = data.get("content");
+        const id = data.get("id");
+
+        await connection.query("UPDATE Notes SET content=(?) WHERE id=(?)", [newContent, id])
     }
 }
