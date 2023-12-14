@@ -9,6 +9,15 @@
     function callSpeechRecognition() {
         dispatch('speechRecognition')
     }
+
+    function callTranslation() {
+        dispatch('translation')
+    }
+
+    function callCopy() {
+        dispatch('copy')
+    }
+
     export let dialog;
 </script>
 
@@ -35,7 +44,7 @@
     </div>
 
     <div class="text-options-end">
-        <button><img alt="copy" width="45px" height="45px" src="text-options/copy.png"></button>
+        <button on:click={() => callCopy()}><img alt="copy" width="45px" height="45px" src="text-options/copy.png"></button>
         <button on:click={() => callSpeechRecognition()}><img alt="microphone" width="45px" height="45px" src="text-options/microphone.png"></button>
         <button on:click={() => callSpeak()}><img alt="speak" class="speak" width="45px" height="45px"
                                                   src="text-options/speak.png"></button>

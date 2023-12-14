@@ -6,7 +6,6 @@ export const shortcut = (node, params) => {
         if (!params)
             return;
         handler = (e) => {
-            console.log(!!params.control + " " + e.metaKey)
             if ((!!params.control !== e.shiftKey) ||
                 (!!params.control !== (e.ctrlKey || e.metaKey)) ||
                 params.code !== e.code)

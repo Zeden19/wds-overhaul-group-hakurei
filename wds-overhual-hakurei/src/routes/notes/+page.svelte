@@ -4,6 +4,7 @@
     import {enhance} from "$app/forms";
     import File from "./File.svelte";
 
+
     export let data;
     const user = data.user;
     let notes = data.notes;
@@ -20,12 +21,8 @@
 
     let debounceTimer;
 
-    function submitFormRequest() {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-            noteContentForm.requestSubmit();
-        }, 500);
-    }
+    let noteArea;
+
     onMount(() => {
         speechSynthesis.onvoiceschanged = () => {
             voices = speechSynthesis.getVoices();
@@ -39,6 +36,38 @@
         recognition.lang = "en-US";
         recognition.interimResults = false;
     });
+
+    function textToSpeech() {
+        recognition.start()
+
+        recognition.onresult = (event) => {
+            text += " " + event.results[0][0].transcript.charAt(0).toUpperCase() + event.results[0][0].transcript.slice(1) + ".";
+        };
+
+        recognition.onspeechend = () => {
+            recognition.stop();
+        };
+    }
+
+    function play() {
+        console.log(notes)
+        let spokenText = window.getSelection().toString() === "" ? text : window.getSelection().toString()
+        speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(spokenText);
+        utterance.rate = 1;
+        utterance.pitch = 1;
+        utterance.voice = selectedVoice;
+        utterance.volume = 1;
+        speechSynthesis.speak(utterance);
+    }
+
+    async function copy() {
+        try {
+            await navigator.clipboard.writeText(text);
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     async function newNote(name, content) {
         const response = await fetch('/api/addNote', {
@@ -54,37 +83,24 @@
 
     }
 
-    function play() {
-        console.log(notes)
-        let spokenText = window.getSelection().toString() === "" ? text : window.getSelection().toString()
-        speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(spokenText);
-        utterance.rate = 1;
-        utterance.pitch = 1;
-        utterance.voice = selectedVoice;
-        utterance.volume = 1;
-        speechSynthesis.speak(utterance);
+    function submitFormRequest() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            noteContentForm.requestSubmit();
+        }, 500);
     }
 
-    function textToSpeech() {
-        recognition.start()
 
-        recognition.onresult = (event) => {
-            text += " " + event.results[0][0].transcript.charAt(0).toUpperCase() + event.results[0][0].transcript.slice(1) + ".";
-        };
-
-        recognition.onspeechend = () => {
-            recognition.stop();
-        };
-    }
 </script>
 
 <!--todo's:
 add translation
 find other way to update local "notes" variable
-Add success for loading (and returning success or failure)-->
+Add success for loading (and returning success or failure). Errors for speech to text and clipboard needed
+adding hovering elements to show success and failure that disappear automatically. include type of success
+Consider stop using form request for regular json api-->
 <h2>Hello {user.name}</h2>
-<TextOptions on:speechRecognition={() => textToSpeech()} on:speak={() => play()}/>
+<TextOptions on:copy={() => copy()} on:speechRecognition={() => textToSpeech()} on:speak={() => play()}/>
 <div class="notes_main">
     <div class="sidebar">
         <div class="top">
@@ -98,15 +114,17 @@ Add success for loading (and returning success or failure)-->
             {/each}
         </div>
     </div>
-    <form method="post" bind:this={noteContentForm} action="?/setNoteContent" class="notes" use:enhance={() => {
-    return async ({update}) => {
-        update({reset: false})
-        notes.find((note) => note.id === fileId).content = text;
-        notes = notes;
-    }}}>
+    <form method="post" bind:this={noteContentForm} action="?/setNoteContent" class="notes"
+          use:enhance={() => {
+            return async ({update, result}) => {
+                update({reset: false})
+                notes.find((note) => note.id === fileId).content = text;
+                notes = notes;
+            }}}>
         <input type="hidden" name="id" value="{fileId}">
-        <textarea data-form-type="other" autocomplete="off" bind:value={text} name="content" cols="30" rows="10"
-                  class="writing" on:keyup={() => submitFormRequest()} on:focusout={() => noteContentForm.requestSubmit()}></textarea>
+        <textarea data-form-type="other" autocomplete="off" name="content" cols="30" rows="10" class="writing" autofocus
+                  bind:value={text} bind:this={noteArea}
+                  on:keyup|preventDefault={() => submitFormRequest()}></textarea>
     </form>
 </div>
 
