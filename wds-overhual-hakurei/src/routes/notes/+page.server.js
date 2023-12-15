@@ -27,6 +27,7 @@ export const actions = {
 
         await connection.query("UPDATE Notes SET name=(?) WHERE id=(?)", [newTitle, id])
 
+        return {success: true, type: "title"}
     },
 
     setNoteContent: async ({request}) => {
@@ -37,5 +38,7 @@ export const actions = {
         const id = data.get("id");
 
         await connection.query("UPDATE Notes SET content=(?) WHERE id=(?)", [newContent, id])
+
+        return {success: true, type: "content"}
     }
 }

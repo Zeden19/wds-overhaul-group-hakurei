@@ -16,6 +16,8 @@
     let titleForm;
     export let notes;
 
+    let loading = false;
+
     function setNewNote(content) {
         text = content
         fileId = id
@@ -30,18 +32,23 @@
 </script>
 
 <div transition:slide={{x: -200}} role="button" tabindex="0" on:keydown={(key) => handleKeyDown(key)}
-     class:selected={fileId === id}
-     on:click|preventDefault={() => setNewNote(content)} class="file-rectangle">
+     class:selected={fileId === id} on:click|preventDefault={() => setNewNote(content)} class="file-rectangle">
     <div class="title-date">
-        <form method="post" action="?/newNoteTitle" bind:this={titleForm} use:enhance={() => {
+
+        <form method="post" action="?/newNoteTitle" bind:this={titleForm}
+              on:focusout={() => titleForm.requestSubmit()}
+              use:enhance={() => {
             return async ({update}) => {
-                update({reset: false})
+                console.log("submitting")
+                loading = true;
+                await update({reset: false})
+                loading = false;
                 notes.find((note) => note.id === id).name = title;
                 notes = notes;
+
             }
         }}>
-            <input autocomplete="off" data-form-type="other" name="title" type="text" class="title" bind:value="{title}"
-                   on:focusout={() => titleForm.requestSubmit()}>
+            <input autocomplete="off" data-form-type="other" name="title" type="text" class="title" bind:value="{title}">
             <input name="id" type="hidden" value="{id}">
         </form>
         <p class="date">{`${date.toLocaleString('en-US', {

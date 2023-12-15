@@ -1,5 +1,6 @@
 <script>
     import TextOptions from "./TextOptions.svelte";
+    import {fly} from "svelte/transition";
     import {onMount} from "svelte";
     import {enhance} from "$app/forms";
     import File from "./File.svelte";
@@ -8,6 +9,7 @@
     export let data;
     const user = data.user;
     let notes = data.notes;
+    export let form;
 
     let voices = [];
     let selectedVoice;
@@ -19,9 +21,10 @@
 
     let recognition;
 
-    let debounceTimer;
-
     let noteArea;
+    let isBeingEdited = false;
+    let loading = false;
+    let debounceTimer;
 
     onMount(() => {
         speechSynthesis.onvoiceschanged = () => {
@@ -87,7 +90,13 @@
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
             noteContentForm.requestSubmit();
-        }, 500);
+        }, 300);
+    }
+
+    $: if (form?.success) {
+        setTimeout(() => {
+            form = null;
+        }, 1000)
     }
 
 
@@ -116,16 +125,26 @@ Consider stop using form request for regular json api-->
     </div>
     <form method="post" bind:this={noteContentForm} action="?/setNoteContent" class="notes"
           use:enhance={() => {
+              loading = true;
             return async ({update, result}) => {
-                update({reset: false})
+                await update({reset: false})
                 notes.find((note) => note.id === fileId).content = text;
                 notes = notes;
+                loading = false;
             }}}>
         <input type="hidden" name="id" value="{fileId}">
-        <textarea data-form-type="other" autocomplete="off" name="content" cols="30" rows="10" class="writing" autofocus
+        <textarea data-form-type="other" autocomplete="off" name="content" cols="30" rows="10" class="writing"
                   bind:value={text} bind:this={noteArea}
+                  on:focusin={() => isBeingEdited = true} on:focusout={() => isBeingEdited = false}
+                  autofocus="{isBeingEdited}"
                   on:keyup|preventDefault={() => submitFormRequest()}></textarea>
     </form>
+
+    {#if form?.success}
+        <div in:fly={{y:50}} out:fly={{y:50}} class="overlay">
+            <span>Successfully saved note {form.type}</span>
+        </div>
+    {/if}
 </div>
 
 <style>
@@ -196,5 +215,25 @@ Consider stop using form request for regular json api-->
         height: 90%;
         overflow-y: scroll;
         margin-bottom: 20px;
+    }
+
+    .overlay {
+        position: fixed;
+        bottom: 5%;
+        left: 50%;
+        background-color: #4CAF50; /* Green background color */
+        color: #fff; /* Text color */
+        padding: 10px 20px;
+        border-radius: 10px; /* Rounded corners */
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15); /* Shadow for a pleasing effect */
+        z-index: 1000; /* Ensure it appears above other elements */
+        transition: opacity 0.3s ease-in-out; /* Optional: Add a transition effect */
+    }
+
+    /* Styling for the text inside the overlay */
+    .overlay::after {
+        content: '';
+        display: block;
+        clear: both;
     }
 </style>
