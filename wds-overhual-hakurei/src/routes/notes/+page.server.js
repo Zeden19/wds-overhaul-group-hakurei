@@ -27,7 +27,7 @@ export const actions = {
 
         await connection.query("UPDATE Notes SET name=(?) WHERE id=(?)", [newTitle, id])
 
-        return {success: true, type: "title"}
+        return {success: true, message: "Successfully saved title"}
     },
 
     setNoteContent: async ({request}) => {
@@ -39,6 +39,17 @@ export const actions = {
 
         await connection.query("UPDATE Notes SET content=(?) WHERE id=(?)", [newContent, id])
 
-        return {success: true, type: "content"}
+        return {success: true, message: "Successfully saved note"}
+    },
+
+    deleteNote: async ({request}) => {
+        const connection = await mysqlconnFn();
+        const data = await request.formData();
+
+        const id = data.get("id");
+
+        await connection.query("DELETE FROM Notes WHERE id=(?)", [id])
+
+        return {success: true, message: "Successfully deleted note"}
     }
 }

@@ -14,6 +14,7 @@
     export let fileId;
 
     let titleForm;
+    let deleteNoteForm;
     export let notes;
 
     let loading = false;
@@ -29,9 +30,16 @@
         }
     }
 
+    function looseFocusInput(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            event.target.blur();
+        }
+    }
+
 </script>
 
-<div transition:slide={{x: -200}} role="button" tabindex="0" on:keydown={(key) => handleKeyDown(key)}
+<div in:slide={{x: -200}} out:slide={{x:200}} role="button" tabindex="0" on:keydown={(key) => handleKeyDown(key)}
      class:selected={fileId === id} on:click|preventDefault={() => setNewNote(content)} class="file-rectangle">
     <div class="title-date">
 
@@ -39,16 +47,22 @@
               on:focusout={() => titleForm.requestSubmit()}
               use:enhance={() => {
             return async ({update}) => {
-                console.log("submitting")
+
+                if (notes.find((note) => note.id === id).name === title) return;
                 loading = true;
                 await update({reset: false})
+
                 loading = false;
                 notes.find((note) => note.id === id).name = title;
                 notes = notes;
 
             }
         }}>
-            <input autocomplete="off" data-form-type="other" name="title" type="text" class="title" bind:value="{title}">
+            <button type="submit" disabled style="display: none" aria-hidden="true"></button>
+
+            <input on:keydown={(event) => looseFocusInput(event)} autocomplete="off" data-form-type="other"
+                   name="title" type="text" class="title" bind:value="{title}">
+
             <input name="id" type="hidden" value="{id}">
         </form>
         <p class="date">{`${date.toLocaleString('en-US', {
@@ -60,7 +74,23 @@
             minute: 'numeric'
         })}`}</p>
     </div>
-    <div class="three-dots"></div>
+
+    <form class="trash" bind:this={deleteNoteForm} method="post" action="?/deleteNote" use:enhance={() => {
+        return async ({update}) => {
+            loading = true;
+            await update({reset: false})
+            loading = false;
+            notes = notes.filter((note) => note.id !== id);
+            console.log(notes)
+        }
+    }}>
+        <input name="id" type="hidden" value="{id}">
+
+        <img width="25px" height="25px" alt="trash icon closed" src="trashClosed.png"
+             onmouseover="this.src = 'trashOpen.png'"
+             onmouseout="this.src = 'trashClosed.png'"
+             on:click={() => deleteNoteForm.requestSubmit()}>
+    </form>
 </div>
 
 
@@ -108,10 +138,12 @@
 
     }
 
-    .three-dots {
-        width: 50px;
-        height: 50px;
-        background-image: radial-gradient(circle, black 3px, transparent 3px);
-        background-size: 100% 33.33%;
+    .trash {
+        align-self: flex-end;
+        margin-right: 5px;
+    }
+
+    .trash:hover {
+        cursor: pointer;
     }
 </style>

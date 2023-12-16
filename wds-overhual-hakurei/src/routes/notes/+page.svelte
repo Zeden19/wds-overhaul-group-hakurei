@@ -118,7 +118,7 @@ Consider stop using form request for regular json api-->
         </div>
         <div class="files">
             {#each notes as {id, name, content, created_at}}
-                <File {notes} title="{name}" date="{created_at}" content="{content}" id="{id}"
+                <File bind:notes title="{name}" date="{created_at}" content="{content}" id="{id}"
                       bind:fileId bind:text/>
             {/each}
         </div>
@@ -127,6 +127,8 @@ Consider stop using form request for regular json api-->
           use:enhance={() => {
               loading = true;
             return async ({update, result}) => {
+                if (notes.find((note) => note.id === fileId).content === text) return;
+
                 await update({reset: false})
                 notes.find((note) => note.id === fileId).content = text;
                 notes = notes;
@@ -142,7 +144,7 @@ Consider stop using form request for regular json api-->
 
     {#if form?.success}
         <div in:fly={{y:50}} out:fly={{y:50}} class="overlay">
-            <span>Successfully saved note {form.type}</span>
+            <span>{form.message}</span>
         </div>
     {/if}
 </div>
